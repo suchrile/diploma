@@ -1,0 +1,153 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model RefreshToken {
+  id     Int    @id @default(autoincrement())
+  userId Int    @map("user_id")
+  token  String @unique
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("refresh_tokens")
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  username    String   @unique
+  password    String
+  firstname   String
+  lastname    String?
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  followersCount  Int @default(0) @map("followers_count")
+  followingCount  Int @default(0) @map("following_count")
+  postsCount      Int @default(0) @map("posts_count")
+  wishlistCount   Int @default(0) @map("wishlists_count")
+  favouritesCount Int @default(0) @map("favourites_count")
+  viewedCount     Int @default(0) @map("viewed_count")
+
+  images UserImages?
+
+  followers UsersOnUsers[] @relation(name: "followers")
+  following UsersOnUsers[] @relation(name: "following")
+
+  favourites UserFavourite[]
+  wishlist   UserWishlist[]
+
+  refreshTokens RefreshToken[]
+  ownPosts      Post[]         @relation("own_posts")
+  posts         Post[]         @relation("posts")
+  postsLikes    PostLike[]
+  postsComments PostComment[]
+
+  @@map("users")
+}
+
+model UserImages {
+  userId             Int     @id @map("user_id")
+  avatarUrl          String? @map("avatar_url")
+  backgroundUrl      String? @map("background_url")
+  avatarPublicId     String? @map("avatar_public_id")
+  backgroundPublicId String? @map("background_public_id")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("users_images")
+}
+
+model UsersOnUsers {
+  followerId   Int @map("follower_id")
+  followableId Int @map("followable_id")
+
+  follower   User? @relation(name: "followers", fields: [followableId], references: [id])
+  followable User? @relation(name: "following", fields: [followerId], references: [id])
+
+  @@id([followerId, followableId])
+  @@map("users_users")
+}
+
+model UserFavourite {
+  userId  Int @map("user_id")
+  movieId Int @map("movie_id")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@id([userId, movieId])
+  @@map("users_favourites")
+}
+
+model UserWishlist {
+  userId  Int @map("user_id")
+  movieId Int @map("movie_id")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@id([userId, movieId])
+  @@map("users_wishlists")
+}
+
+model Post {
+  id            Int      @id @default(autoincrement())
+  authorId      Int      @map("author_id")
+  movieId       Int?     @map("movie_id")
+  text          String
+  movieRating   Int?     @map("movie_rating")
+  likesCount    Int      @default(0) @map("likes_count")
+  commentsCount Int      @default(0) @map("comments_count")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  author   User          @relation(name: "own_posts", fields: [authorId], references: [id], onDelete: Cascade)
+  users    User[]        @relation("posts")
+  images   PostImage[]
+  likes    PostLike[]
+  comments PostComment[]
+
+  @@map("posts")
+}
+
+model PostLike {
+  postId Int @map("post_id")
+  userId Int @map("user_id")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: NoAction)
+
+  @@id([postId, userId])
+  @@map("posts_likes")
+}
+
+model PostComment {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  authorId  Int      @map("author_id")
+  text      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  post   Post @relation(fields: [postId], references: [id])
+  author User @relation(fields: [authorId], references: [id])
+
+  @@map("posts_comments")
+}
+
+model PostImage {
+  id       Int    @id @default(autoincrement())
+  postId   Int    @map("post_id")
+  publicId String @map("public_id")
+  url      String
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("posts_images")
+}
