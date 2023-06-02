@@ -9,8 +9,8 @@
       Постов пока нет
     </div>
   </div>
-  <LoaderView v-else-if="isProfileLoading" class="profile-page__posts-loader" />
-  <UiNotFound v-else style="min-height: 100%" />
+  <LoaderView v-else-if="isProfileLoading" />
+  <UiNotFound v-else />
 </template>
 
 <script setup lang="ts">
@@ -41,15 +41,6 @@ definePageMeta({
   &__posts {
     margin-top: 10px;
     padding-bottom: 30px;
-  }
-  &__profile-loader,
-  &__posts-loader {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  &__profile-loader {
-    height: 100%;
   }
   &__posts-loader {
     height: calc(100% - 380px);

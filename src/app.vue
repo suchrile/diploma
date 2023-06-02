@@ -1,6 +1,6 @@
 <template>
   <Transition name="app-loader-fade">
-    <LoaderView v-if="isLoading" class="loader" />
+    <LoaderView v-if="isLoading" />
     <div v-else id="app">
       <NuxtLayout>
         <NuxtPage />
@@ -38,13 +38,6 @@ useHead({
 </script>
 
 <style scoped>
-.loader {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
 .app-loader-fade-enter-active,
 .app-loader-fade-leave-active {
   width: 100vw;

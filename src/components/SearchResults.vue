@@ -54,14 +54,10 @@ const ResultItemComponent = computed(() => {
     }
   }
   &__loader {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     height: calc(100% - 100px);
   }
   &__empty {
     height: calc(100% - 100px);
-    padding-bottom: 100px;
   }
 }
 </style>

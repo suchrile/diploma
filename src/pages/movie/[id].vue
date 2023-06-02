@@ -1,12 +1,17 @@
 <template>
-  <div v-if="movie" class="movie-page">
-    <MoviePageHeader :movie="movie" />
-    <MovieVideos v-if="movie.videos.trailers.length || movie.videos.teasers.length" :videos="movie.videos" class="movie-page__videos" />
-    <MoviePageDetails :movie="movie" class="movie-page__details" />
-    <FactsView v-if="movie.facts" :facts="movie.facts" class="movie-page__facts" />
-    <MoviePagePersons v-if="movie.persons.length" :persons="movie.persons" class="movie-page__persons" />
-    <MoviePageSequelsAndPrequels v-if="movie.sequelsAndPrequels.length" :movies="movie.sequelsAndPrequels" class="movie-page__sequels-and-prequels" />
-    <MoviePageSimilar v-if="movie.similarMovies.length" :movies="movie.similarMovies" class="movie-page__similar" />
+  <div class="movie-page">
+    <LoaderView v-if="isLoading" />
+    <div v-else-if="movie" class="movie-page__content">
+      <LoaderView v-if="isLoading" class="person-page__loading" />
+      <MoviePageHeader :movie="movie" />
+      <MovieVideos v-if="movie.videos.trailers.length || movie.videos.teasers.length" :videos="movie.videos" class="movie-page__videos" />
+      <MoviePageDetails :movie="movie" class="movie-page__details" />
+      <FactsView v-if="movie.facts" :facts="movie.facts" class="movie-page__facts" />
+      <MoviePagePersons v-if="movie.persons.length" :persons="movie.persons" class="movie-page__persons" />
+      <MoviePageSequelsAndPrequels v-if="movie.sequelsAndPrequels.length" :movies="movie.sequelsAndPrequels" class="movie-page__sequels-and-prequels" />
+      <MoviePageSimilar v-if="movie.similarMovies.length" :movies="movie.similarMovies" class="movie-page__similar" />
+    </div>
+    <UiNotFound v-else />
   </div>
 </template>
 
@@ -15,9 +20,9 @@ const route = useRoute()
 const { setTitle } = useHeader()
 
 const movie = ref()
+const isLoading = ref(false)
 
 onMounted(async () => {
-  await nextTick()
   await fetchMovie()
 })
 
@@ -26,12 +31,13 @@ onBeforeUnmount(() => {
 })
 
 const fetchMovie = async () => {
+  isLoading.value = true
   const { data } = await useFetch('/api/movies/' + route.params.id)
   if (data.value) {
-    console.log(data.value)
     movie.value = data.value
     setTitle(movie.value.name)
   }
+  isLoading.value = false
 }
 definePageMeta({
   header: true,
@@ -44,7 +50,11 @@ useHead({
 
 <style scoped lang="scss">
 .movie-page {
-  padding: 12px 0 40px;
+  height: 100%;
+  &__content {
+    height: 100%;
+    padding: 12px 0 40px;
+  }
   &__videos {
     margin-top: 25px;
   }

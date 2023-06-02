@@ -16,6 +16,7 @@ defineProps({
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%;
   & img {
     aspect-ratio: 1/1;
     object-fit: cover;

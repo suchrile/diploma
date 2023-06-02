@@ -3,7 +3,7 @@
     <div v-if="wishlist.length" class="wishlist-page__content">
       <MovieCard v-for="movie in wishlist" :key="movie.id" :movie="movie" />
     </div>
-    <LoaderView v-else-if="isLoading" class="wishlist-page__loader" />
+    <LoaderView v-else-if="isLoading" />
     <div v-else class="wishlist-page__empty">
       Тут пока пусто
     </div>
@@ -47,12 +47,6 @@ definePageMeta({
     & div:not(:last-child) {
       margin-bottom: 8px;
     }
-  }
-  &__loader {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
   }
   &__empty {
     display: flex;

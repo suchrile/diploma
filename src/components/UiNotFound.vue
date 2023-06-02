@@ -1,9 +1,11 @@
 <template>
   <div class="not-found">
-    <GifView name="magnifying-glass" class="not-found__image" />
-    <h1 class="not-found__text">
-      {{ text }}
-    </h1>
+    <div class="not-found__content">
+      <GifView name="magnifying-glass" class="not-found__image" />
+      <h1 class="not-found__text">
+        {{ text }}
+      </h1>
+    </div>
   </div>
 </template>
 
@@ -19,6 +21,11 @@ defineProps({
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 100%;
+  &__content {
+    padding-bottom: 50px;
+    text-align: center;
+  }
   &__text {
     margin: 30px 0 0;
     font-size: 21px;
