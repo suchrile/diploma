@@ -1,5 +1,6 @@
 <template>
   <div class="new-post-page">
+    <pre>{{ postData }}</pre>
     <div class="new-post-page__movie">
       <h5 class="new-post-page__title">
         Картина

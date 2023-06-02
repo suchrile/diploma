@@ -5,7 +5,7 @@
         <IconView name="plus-regular" :size="26" />
       </button>
       <div v-for="user in users" :key="user.id" class="new-post-users__item" @click="removeUser(user.id)">
-        <img :src="user.photoUrl" :alt="user.username">
+        <img :src="user.images.avatarUrl || getAvatarPlaceholder(user.username)" :alt="user.username">
       </div>
     </div>
     <NewPostSelectOverlay v-model:visible="isOverlayOpen" title="Выбор пользователей" target="users" @choose="addUser" />

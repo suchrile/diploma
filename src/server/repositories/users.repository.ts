@@ -83,7 +83,7 @@ class UsersRepository {
     return prisma.$transaction([
       this._repository.findMany({
         where: { username: { contains: query } },
-        select: { username: true, firstname: true, lastname: true, images: { select: { avatarUrl: true } } },
+        select: { id: true, username: true, firstname: true, lastname: true, images: { select: { avatarUrl: true } } },
         take: limit,
         skip: page - 1
       }),
