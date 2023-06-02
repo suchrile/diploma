@@ -42,7 +42,7 @@ definePageMeta({
   height: 100%;
   &__posts {
     margin-top: 10px;
-    padding-bottom: 30px;
+    padding-bottom: 50px;
   }
   &__posts-loader {
     height: calc(100% - 380px);

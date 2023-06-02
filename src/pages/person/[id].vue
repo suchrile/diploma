@@ -44,7 +44,7 @@ definePageMeta({
 .person-page {
   height: 100%;
   &__content {
-    padding: 15px 0 30px;
+    padding: 15px 0 50px;
   }
   &__details {
     margin-top: 20px;

@@ -52,8 +52,7 @@ useHead({
 .movie-page {
   height: 100%;
   &__content {
-    height: 100%;
-    padding: 12px 0 40px;
+    padding: 12px 0 50px;
   }
   &__videos {
     margin-top: 25px;
