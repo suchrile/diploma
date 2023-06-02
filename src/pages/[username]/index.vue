@@ -14,6 +14,8 @@
 </template>
 
 <script setup lang="ts">
+import { capitalizeFirstCharacter } from '~/utils'
+
 const route = useRoute()
 const { profile, follow, unfollow, fetchProfile, isLoading: isProfileLoading } = useProfile()
 const { posts, fetchUserPosts, isLoading: isPostsLoading } = usePosts()
@@ -22,7 +24,7 @@ onMounted(async () => {
   await fetchProfile(String(route.params.username))
   await fetchPosts()
 
-  useHead({ title: profile.value?.username })
+  useHead({ title: capitalizeFirstCharacter(profile.value?.username) })
 })
 
 const fetchPosts = () => {

@@ -71,6 +71,11 @@ definePageMeta({
   header: true,
   footer: true
 })
+
+useHead({
+  title: 'Новый пост'
+})
+
 </script>
 
 <style scoped lang="scss">

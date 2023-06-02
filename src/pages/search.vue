@@ -34,6 +34,10 @@ definePageMeta({
   footer: true
 })
 
+useHead({
+  title: 'Поиск'
+})
+
 </script>
 
 <style scoped lang="scss">

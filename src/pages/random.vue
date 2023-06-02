@@ -23,7 +23,7 @@ const movie = ref()
 const isLoading = ref(true)
 
 onMounted(async () => {
-  setTitle('Случайный тайтл')
+  setTitle('Случайная картина')
   await nextTick()
   await fetchMovie()
 })
@@ -41,6 +41,11 @@ definePageMeta({
   header: true,
   footer: true
 })
+
+useHead({
+  title: 'Случайная картина'
+})
+
 </script>
 
 <style scoped lang="scss">

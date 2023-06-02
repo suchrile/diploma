@@ -34,6 +34,11 @@ const submit = async () => {
 definePageMeta({
   layout: 'auth'
 })
+
+useHead({
+  title: 'Вход'
+})
+
 </script>
 
 <style scoped lang="scss">

@@ -38,6 +38,10 @@ definePageMeta({
   footer: true
 })
 
+useHead({
+  title: 'Лента'
+})
+
 </script>
 
 <style scoped lang="scss">
