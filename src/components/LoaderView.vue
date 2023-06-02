@@ -13,6 +13,9 @@ defineProps({
 
 <style scoped lang="scss">
 .loader-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   & img {
     aspect-ratio: 1/1;
     object-fit: cover;

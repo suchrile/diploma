@@ -1,6 +1,7 @@
 <template>
   <div class="search-results">
-    <div v-if="results && results.length" class="search-results__container">
+    <LoaderView v-if="loading" class="search-results__loader" />
+    <div v-else-if="results && results.length" class="search-results__container">
       <Component
         :is="ResultItemComponent"
         v-for="entity in results"
@@ -13,7 +14,7 @@
         @click="emit('choose', entity)"
       />
     </div>
-    <UiNotFound v-else-if="results && !results.length" text="Ничего не найдено" class="search-results__not-found" />
+    <UiNotFound v-else-if="results && !results.length" text="Ничего не найдено" class="search-results__empty" />
   </div>
 </template>
 
@@ -24,7 +25,8 @@ import { PersonCard, SearchMovieCard, UserCard } from '#components'
 const props = defineProps({
   target: { type: String, default: 'movies' },
   results: { type: [Object, null] as PropType<object[] | null>, required: true },
-  emitOnClick: { type: Boolean, default: false }
+  emitOnClick: { type: Boolean, default: false },
+  loading: { type: Boolean, default: false }
 })
 const emit = defineEmits(['choose'])
 
@@ -51,7 +53,13 @@ const ResultItemComponent = computed(() => {
       margin-bottom: 10px;
     }
   }
-  &__not-found {
+  &__loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 100px);
+  }
+  &__empty {
     height: calc(100% - 100px);
     padding-bottom: 100px;
   }

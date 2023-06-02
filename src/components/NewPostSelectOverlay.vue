@@ -2,7 +2,14 @@
   <UiOverlay :visible="visible" :title="title" class="new-post-add-movie-overlay" @update:visible="emit('update:visible', $event)">
     <div class="new-post-add-movie-overlay__container">
       <SearchField class="new-post-add-movie-overlay__search" @search="fetchResults" />
-      <SearchResults :target="target" :results="results" emit-on-click class="new-post-add-movie-overlay__results" @choose="emit('choose', $event)" />
+      <SearchResults
+        :target="target"
+        :loading="isLoading"
+        :results="results"
+        emit-on-click
+        class="new-post-add-movie-overlay__results"
+        @choose="emit('choose', $event)"
+      />
     </div>
   </UiOverlay>
 </template>
@@ -16,12 +23,15 @@ const props = defineProps({
 const emit = defineEmits(['update:visible', 'choose'])
 
 const results = ref(null)
+const isLoading = ref(false)
 
 const fetchResults = async (query: string) => {
+  isLoading.value = true
   const { data } = await useApiFetch<Object[]>('/api/' + props.target, { query: { query } })
   if (data) {
     results.value = data.docs
   }
+  isLoading.value = false
 }
 
 </script>

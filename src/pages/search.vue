@@ -3,7 +3,7 @@
     <div class="search-page__content">
       <SearchField class="search-page__header" @search="search" />
       <SearchPageTabs class="search-page__tabs" />
-      <SearchResults :target="searchTarget" :results="results[searchTarget]" class="search-page__results" />
+      <SearchResults :target="searchTarget" :loading="isLoading" :results="results[searchTarget]" class="search-page__results" />
     </div>
   </div>
 </template>
@@ -17,14 +17,17 @@ const results = ref({
   series: null,
   persons: null
 })
+const isLoading = ref(false)
 
 const searchTarget = computed(() => route.query.target)
 
 const search = async (query: string) => {
+  isLoading.value = true
   const { data } = await useApiFetch<Object[]>('/api/' + searchTarget.value, { query: { query: query.toLowerCase() } })
   if (data) {
     results.value[searchTarget.value] = data.docs ? data.docs : data
   }
+  isLoading.value = false
 }
 
 definePageMeta({

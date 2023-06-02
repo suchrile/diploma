@@ -3,7 +3,7 @@
     <div v-if="followers.length" class="followers-page__content">
       <UserCard v-for="follower in followers" :key="follower.username" :user="follower" />
     </div>
-    <LoaderView v-else-if="isLoading" class="following-page__loader" />
+    <LoaderView v-else-if="isLoading" class="followers-page__loader" />
     <div v-else class="followers-page__empty">
       Подписчиков пока нет
     </div>
@@ -47,6 +47,12 @@ definePageMeta({
     & div:not(:last-child) {
       margin-bottom: 8px;
     }
+  }
+  &__loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
   }
   &__empty {
     display: flex;

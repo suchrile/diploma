@@ -1,5 +1,6 @@
 export const useProfile = () => {
   const profile = ref()
+  const isLoading = ref(false)
 
   const follow = async () => {
     const { data } = await useApiFetch('/api/users/follow/' + profile.value.id)
@@ -18,11 +19,13 @@ export const useProfile = () => {
   }
 
   const fetchProfile = async (username: string) => {
+    isLoading.value = true
     const { data } = await useApiFetch('/api/users/' + username)
     if (data) {
       profile.value = data
     }
+    isLoading.value = false
   }
 
-  return { profile, follow, unfollow, fetchProfile }
+  return { profile, follow, unfollow, fetchProfile, isLoading }
 }
