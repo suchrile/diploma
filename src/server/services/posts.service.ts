@@ -22,7 +22,7 @@ class PostsService {
       }
     }
 
-    return this._repository.create({
+    const [post] = await this._repository.create({
       authorId: dto.authorId,
       movieId: dto.movieId,
       text: dto.text,
@@ -30,6 +30,8 @@ class PostsService {
       users: dto.users,
       images
     })
+
+    return post
   }
 
   update (id: number, dto) {

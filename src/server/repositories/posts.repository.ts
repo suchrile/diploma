@@ -25,7 +25,8 @@ class PostsRepository {
           movieRating: dto.movieRating,
           users: { connect: [{ id: dto.authorId }, ...userIdsToConnect] },
           images: { createMany: { data: dto.images } }
-        }
+        },
+        select: { id: true }
       }),
       this._usersRepository.incrementField(dto.authorId, 'postsCount')
     ])
@@ -58,7 +59,7 @@ class PostsRepository {
     return prisma.$transaction([
       this._repository.findMany({
         where: { authorId },
-        include: { users: { select: { username: true, images: { select: { avatarUrl: true } } } }, images: true },
+        include: { users: { select: { id: true, username: true, images: { select: { avatarUrl: true } } } }, images: true },
         take: limit,
         skip: page * limit,
         orderBy: { createdAt: 'desc' }
