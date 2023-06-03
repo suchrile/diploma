@@ -22,7 +22,8 @@ class UsersRepository {
     return this._repository.update({
       where: { id },
       data: {
-        images: {
+        ...dto,
+        images: dto.images && {
           upsert: {
             update: dto.images,
             create: dto.images

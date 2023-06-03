@@ -24,7 +24,7 @@ class UsersService {
 
   async update (id: number, dto) {
     let images
-    if (dto.images) {
+    if (Object.keys(dto.images).length) {
       const existingImages = await this._repository.findImagesById(id)
       images = {}
       if (dto.images.avatarUrl) {
