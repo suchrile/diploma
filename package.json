@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "@prisma/client": "^4.14.1",
+    "@vuelidate/core": "^2.0.2",
+    "@vuelidate/validators": "^2.0.2",
     "bcrypt": "^5.1.0",
     "cloudinary": "^1.37.0",
     "joi": "^17.9.2",
@@ -29,5 +31,8 @@
     "swiper": "^9.3.2",
     "url-pattern": "^1.0.3",
     "uuid": "^9.0.0"
+  },
+  "overrides": {
+    "vue": "latest"
   }
 }

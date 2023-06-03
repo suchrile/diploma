@@ -1,25 +1,35 @@
 <template>
   <div class="signup-page">
-    <h1 class="signup-page__title">
-      Регистрация
-    </h1>
-    <UiInput v-model="signupData.firstname" :disabled="isLoading" placeholder="Ваше имя" />
-    <UiInput v-model="signupData.username" :disabled="isLoading" placeholder="Имя пользователя" />
-    <UiInput v-model="signupData.password" type="password" :disabled="isLoading" placeholder="Пароль" />
-    <UiInput v-model="signupData.passwordConfirmation" type="password" :disabled="isLoading" placeholder="Повторите пароль" />
-    <UiButtonLarge :loading="isLoading" class="signup-page__button" @click="submit">
-      Зарегистрироваться
-    </UiButtonLarge>
-    <div class="signup-page__login">
-      <span>Есть аккаунт?</span>
-      <NuxtLink to="/login">
-        Войти
-      </NuxtLink>
+    <div class="signup-page__content">
+      <h1 class="signup-page__title">
+        Регистрация
+      </h1>
+      <form @submit.prevent="submit">
+        <UiInput v-model.trim="signupData.firstname" :disabled="isLoading" :error="v$.firstname.$error && v$.firstname.$errors[0].$message" placeholder="Ваше имя" />
+        <UiInput v-model.trim="signupData.username" :disabled="isLoading" :error="v$.username.$error && v$.username.$errors[0].$message" placeholder="Имя пользователя" />
+        <UiInput v-model.trim="signupData.password" type="password" :disabled="isLoading" :error="v$.password.$error && v$.password.$errors[0].$message" placeholder="Пароль" />
+        <UiInput v-model.trim="signupData.passwordConfirmation" type="password" :disabled="isLoading" :error="v$.passwordConfirmation.$error && v$.passwordConfirmation.$errors[0].$message" placeholder="Повторите пароль" />
+        <p v-if="error" class="signup-page__error">
+          Имя пользователя занято
+        </p>
+        <UiButtonLarge type="submit" :loading="isLoading" class="signup-page__button">
+          Зарегистрироваться
+        </UiButtonLarge>
+      </form>
+      <div class="signup-page__login">
+        <span>Есть аккаунт?</span>
+        <NuxtLink to="/login">
+          Войти
+        </NuxtLink>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { minLength, sameAs, required, helpers } from '@vuelidate/validators'
+import useVuelidate from '@vuelidate/core'
+import { minPasswordLength } from '~/consts'
 
 const { signup, useAuthLoading } = useAuth()
 
@@ -29,14 +39,32 @@ const signupData = reactive({
   password: '',
   passwordConfirmation: ''
 })
+const error = ref()
 const isLoading = useAuthLoading()
 
+const rules = computed(() => ({
+  firstname: { required: helpers.withMessage('Введите Ваше имя', required) },
+  username: { required: helpers.withMessage('Введите имя пользователя', required) },
+  password: {
+    minLength: helpers.withMessage(`Минимальная длина – ${minPasswordLength} символов`, minLength(minPasswordLength)),
+    required: helpers.withMessage('Введите пароль', required)
+  },
+  passwordConfirmation: {
+    sameAs: helpers.withMessage('Пароли не совпадают', sameAs(signupData.password)),
+    required: helpers.withMessage('Введите пароль еще раз', required)
+  }
+}))
+const v$ = useVuelidate(rules, signupData)
+
 const submit = async () => {
-  await signup({
-    firstname: signupData.firstname,
-    username: signupData.username,
-    password: signupData.password
-  })
+  const isValid = await v$.value.$validate()
+  if (isValid) {
+    error.value = await signup({
+      firstname: signupData.firstname,
+      username: signupData.username,
+      password: signupData.password
+    })
+  }
 }
 
 definePageMeta({
@@ -51,11 +79,16 @@ useHead({
 
 <style scoped lang="scss">
 .signup-page {
-  padding: 20px 20px 40px 20px;
+  width: 100%;
+  &__content {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px 20px 40px 20px;
+  }
   &__title {
     margin: 0 0 20px;
   }
-  & input:not(:last-of-type) {
+  & .ui-input:not(:last-child) {
     margin-bottom: 12px;
   }
   &__button {
@@ -71,6 +104,9 @@ useHead({
       color: #FF9E0B;
       text-decoration: none;
     }
+  }
+  &__error {
+    color: #ff453a;
   }
 }
 </style>

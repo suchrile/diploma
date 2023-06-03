@@ -25,7 +25,7 @@ export default () => {
       await getUserData()
       await navigateTo('/')
     } catch (error) {
-      console.log(error)
+      return error
     } finally {
       setIsAuthLoading(false)
     }
@@ -42,7 +42,7 @@ export default () => {
       await getUserData()
       await navigateTo('/')
     } catch (error) {
-      console.log(error)
+      return error
     } finally {
       setIsAuthLoading(false)
     }
