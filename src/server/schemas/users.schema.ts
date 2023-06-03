@@ -4,7 +4,7 @@ export const usersIdSchema = joi.number().integer().positive()
 export const usersUsernameSchema = joi.string()
 
 export const usersCreateSchema = joi.object({
-  username: joi.string().required(),
+  username: joi.string().lowercase().required(),
   password: joi.string().required(),
   firstname: joi.string().required(),
   lastname: joi.string().optional()
