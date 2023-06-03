@@ -40,6 +40,7 @@ class PostsService {
 
   async findOne (postId: number, userId: number) {
     const post = await this._repository.findOne(postId)
+    if (!post) { return null }
     const movie = await this._kinopoiskService.getMovieById(post.movieId)
     const likeRecord = await this._repository.findLikeRecord(postId, userId)
     return { ...post, movie, isLiked: !!likeRecord }
@@ -47,6 +48,9 @@ class PostsService {
 
   async findMany ({ authorId, userId, page = 1, limit = 3 }) {
     const [posts, total] = await this._repository.findMany({ authorId, page: page - 1, limit: +limit })
+    if (!posts.length) {
+      return { docs: [], page, limit, total }
+    }
     const postIds = []
     const postMoviesIds = []
     posts.forEach((p) => {
