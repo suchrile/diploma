@@ -26,10 +26,10 @@
         </div>
       </div>
 
-      <UiInput v-model="userData.firstname" :disabled="isLoading" placeholder="Имя" class="edit-page__field" />
-      <UiInput v-model="userData.lastname" :disabled="isLoading" placeholder="Фамилия" class="edit-page__field" />
+      <UiInput v-model.trim="userData.firstname" :disabled="isLoading" placeholder="Имя" class="edit-page__field" />
+      <UiInput v-model.trim="userData.lastname" :disabled="isLoading" placeholder="Фамилия" class="edit-page__field" />
       <UiTextarea
-        v-model="userData.description"
+        v-model.trim="userData.description"
         :max-length="maxProfileDescriptionLength"
         :rows="4"
         :disabled="isLoading"
