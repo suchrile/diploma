@@ -25,8 +25,8 @@ const props = defineProps({
 })
 
 const videos = [
-  ...props.videos.trailers.filter(v => v.site === 'youtube' && v.url.includes('embed')),
-  ...props.videos.teasers.filter(v => v.site === 'youtube' && v.url.includes('embed'))
+  ...props.videos.trailers?.filter(v => v.site === 'youtube' && v.url.includes('embed')),
+  ...props.videos.teasers?.filter(v => v.site === 'youtube' && v.url.includes('embed'))
 ]
 
 </script>
