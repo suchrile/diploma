@@ -60,6 +60,9 @@ defineProps({
   &.tinted {
     color: #FF9E0B;
     background-color: rgba(255, 255, 255, 0.15);
+    & i {
+      fill: #FF9E0B;
+    }
   }
 }
 </style>
