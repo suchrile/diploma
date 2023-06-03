@@ -1,6 +1,6 @@
 <template>
   <div class="post-view">
-    <PostViewHeader :authors="authors" class="post-view__header" />
+    <PostViewHeader :movie="modelValue" class="post-view__header" @delete="emit('delete')" />
     <PostViewContent :post="modelValue" class="post-view__content" />
     <MovieCard :movie="modelValue.movie" class="post-view__movie-card" />
     <PostViewFooter :post="modelValue" class="post-view__footer" @like="like" @unlike="unlike" />
@@ -11,9 +11,7 @@
 const props = defineProps({
   modelValue: { type: Object, required: true }
 })
-const emit = defineEmits(['update:modelValue'])
-
-const authors = [...props.modelValue.users].sort((a, b) => a.id === props.modelValue.authorId ? -1 : b.id === props.modelValue.authorId ? 1 : 0)
+const emit = defineEmits(['update:modelValue', 'delete'])
 
 const like = async () => {
   const { data } = await useApiFetch(`/api/posts/${props.modelValue.id}/like`, { method: 'POST' })

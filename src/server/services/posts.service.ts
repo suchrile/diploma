@@ -72,8 +72,20 @@ class PostsService {
     }
   }
 
-  deleteOne (id: number) {
-    return this._repository.deleteOne(id)
+  async delete (postId: number, userId: number) {
+    const post = await this._repository.findOne(postId)
+    if (!post) {
+      throw createError({
+        statusCode: 404,
+        message: 'Пост не найден.'
+      })
+    }
+    if (post.images.length) {
+      for (const image of post.images) {
+        await this._cloudinaryService.remove(image.publicId)
+      }
+    }
+    return this._repository.delete(postId, userId)
   }
 
   like (postId: number, userId: number) {
@@ -93,7 +105,7 @@ class PostsService {
     const desiredComment = await this._repository.findComment(commentId)
     if (!desiredComment) {
       throw createError({
-        statusCode: 400,
+        statusCode: 404,
         message: 'Комментарий не найден.'
       })
     }

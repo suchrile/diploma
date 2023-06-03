@@ -49,7 +49,7 @@ class PostsRepository {
           select: { id: true, username: true, images: { select: { avatarUrl: true } } }
         },
         images: {
-          select: { id: true, url: true }
+          select: { id: true, url: true, publicId: true }
         }
       }
     })
@@ -68,10 +68,10 @@ class PostsRepository {
     ])
   }
 
-  deleteOne (id: number) {
+  delete (postId: number, userId: number) {
     return prisma.$transaction([
-      this._repository.delete({ where: { id } }),
-      this._usersRepository.decrementField(id, 'postsCount')
+      this._repository.delete({ where: { id: postId } }),
+      this._usersRepository.decrementField(userId, 'postsCount')
     ])
   }
 

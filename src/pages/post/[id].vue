@@ -1,6 +1,6 @@
 <template>
   <div v-if="post" class="post-page">
-    <PostView v-model="post" />
+    <PostView v-model="post" @delete="removePost" />
     <PostComments v-model="post" />
   </div>
 
@@ -10,6 +10,8 @@
 <script setup lang="ts">
 const route = useRoute()
 const { setTitle } = useHeader()
+const { useUserData } = useUser()
+const user = useUserData()
 
 const post = ref()
 const isLoading = ref(true)
@@ -17,6 +19,13 @@ const isLoading = ref(true)
 onMounted(async () => {
   await fetchPost()
 })
+
+const removePost = async () => {
+  const { data } = await useApiFetch(`/api/posts/${post.value.id}`, { method: 'DELETE' })
+  if (data) {
+    await navigateTo('/' + user.value.username)
+  }
+}
 
 const fetchPost = async () => {
   isLoading.value = true

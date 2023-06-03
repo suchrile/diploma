@@ -5,7 +5,7 @@
         Feed
       </h1>
       <InfinityScroll class="feed-page__list" @trigger="fetchData">
-        <PostView v-for="(post, index) in posts" :key="post.id" v-model="posts[index]" />
+        <PostView v-for="(post, index) in posts" :key="post.id" v-model="posts[index]" @delete="deletePost(post.id)" />
       </InfinityScroll>
     </div>
     <LoaderView v-else-if="isLoading" class="feed-page__loader" />
@@ -22,6 +22,13 @@ const isLoading = ref(false)
 onMounted(async () => {
   await fetchData()
 })
+
+const deletePost = async (id: number) => {
+  const { data } = await useApiFetch(`/api/posts/${id}`, { method: 'DELETE' })
+  if (data) {
+    posts.value = posts.value.filter(p => p.id !== id)
+  }
+}
 
 const fetchData = async () => {
   if (posts.value.length === total.value) { return }
