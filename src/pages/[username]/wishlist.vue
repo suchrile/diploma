@@ -1,9 +1,11 @@
 <template>
   <div class="wishlist-page">
-    <div v-if="wishlist.length" class="wishlist-page__content">
-      <MovieCard v-for="movie in wishlist" :key="movie.id" :movie="movie" />
+    <LoaderView v-if="isLoading" />
+    <div v-else-if="wishlist.length" class="wishlist-page__content">
+      <InfinityScroll class="wishlist-page__content" @trigger="loadWishlist">
+        <MovieCard v-for="movie in wishlist" :key="movie.id" :movie="movie.movie" />
+      </InfinityScroll>
     </div>
-    <LoaderView v-else-if="isLoading" />
     <div v-else class="wishlist-page__empty">
       Тут пока пусто
     </div>
@@ -14,22 +16,15 @@
 
 const route = useRoute()
 const { setTitle } = useHeader()
-
-const wishlist = ref([])
-const isLoading = ref(true)
+const { wishlist, fetchWishlist, isLoading } = useWishlist()
 
 onMounted(async () => {
   setTitle('Желаемое')
-  await fetchFollowers()
+  await loadWishlist()
 })
 
-const fetchFollowers = async () => {
-  isLoading.value = true
-  const { data } = await useApiFetch(`/api/users/${route.params.username}/wishlist`)
-  if (data) {
-    wishlist.value = data
-  }
-  isLoading.value = false
+const loadWishlist = async () => {
+  await fetchWishlist(String(route.params.username))
 }
 
 definePageMeta({
@@ -44,7 +39,7 @@ definePageMeta({
   height: 100%;
   &__content {
     padding: 10px 0 50px;
-    & div:not(:last-child) {
+    & .movie-card:not(:last-child) {
       margin-bottom: 8px;
     }
   }
