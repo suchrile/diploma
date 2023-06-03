@@ -24,9 +24,11 @@ const isOverlayOpen = ref(false)
 
 const addUser = (value) => {
   isOverlayOpen.value = false
-  users.value.push(value)
-  const userIds = users.value.map(u => u.id)
-  emit('update:modelValue', userIds)
+  if (!users.value.find(u => u.id === value.id)) {
+    users.value.push(value)
+    const userIds = users.value.map(u => u.id)
+    emit('update:modelValue', userIds)
+  }
 }
 
 const removeUser = (userId: number) => {
