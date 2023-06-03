@@ -84,7 +84,13 @@ class UsersRepository {
   findMany (query: string, { page, limit }: Pagination) {
     return prisma.$transaction([
       this._repository.findMany({
-        where: { username: { contains: query } },
+        where: {
+          OR: [
+            { username: { contains: query, mode: 'insensitive' } },
+            { firstname: { contains: query, mode: 'insensitive' } },
+            { lastname: { contains: query, mode: 'insensitive' } }
+          ]
+        },
         select: { id: true, username: true, firstname: true, lastname: true, images: { select: { avatarUrl: true } } },
         take: limit,
         skip: page && limit && page - 1
