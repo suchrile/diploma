@@ -3,6 +3,7 @@
     ref="textarea"
     :value="modelValue"
     :rows="autoResize ? (rows ? rows : 1) : (rows || 5)"
+    :maxLength="maxLength"
     :placeholder="placeholder"
     :disabled="disabled"
     :style="{ height }"
@@ -18,7 +19,8 @@ const props = defineProps({
   rows: { type: Number, default: 0 },
   disabled: { type: Boolean, default: false },
   autoResize: { type: Boolean, default: false },
-  maxHeight: { type: Number, default: 116 }
+  maxHeight: { type: Number, default: 116 },
+  maxLength: { type: Number, default: null }
 })
 const emit = defineEmits(['update:modelValue'])
 
