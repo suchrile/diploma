@@ -1,7 +1,8 @@
-import KinopoiskService from '../../services/kinopoisk.service'
+import MoviesService from '../../services/movies.service'
 
 export default defineEventHandler((event) => {
+  const userId = event.context.user.id
   const params = event.context.params!
 
-  return KinopoiskService.getMovieById(Number(params.id))
+  return MoviesService.getOne(Number(params.id), userId)
 })
