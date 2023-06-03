@@ -29,11 +29,12 @@ defineProps({
     content: "";
     left: 15px;
     bottom: 0;
-    width: 90px;
-    height: 90px;
+    width: 100px;
+    height: 100px;
     border: 5px solid #000000;
     border-radius: 50%;
     transform: translateY(50%);
+    box-sizing: border-box;
     position: absolute;
   }
   &__background,

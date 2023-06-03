@@ -17,11 +17,12 @@ defineProps({
 .post-view-header-avatars {
   display: flex;
   &__item {
-    width: 35px;
-    height: 35px;
+    width: 42px;
+    height: 42px;
     border: 3.5px solid black;
     border-radius: 50%;
     overflow: hidden;
+    box-sizing: border-box;
     & img {
       width: 100%;
       height: 100%;

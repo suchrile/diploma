@@ -2,7 +2,7 @@
   <div class="post-comment" @click="handleDeleteClick">
     <div class="post-comment__wrapper">
       <NuxtLink :to="'/' + comment.author.username" class="post-comment__avatar">
-        <img :src="comment.author.images.avatarUrl" :alt="comment.author.username">
+        <img :src="comment.author.images?.avatarUrl || getAvatarPlaceholder(comment.author.username)" :alt="comment.author.username">
       </NuxtLink>
       <div class="post-comment__content">
         <NuxtLink :to="'/' + comment.author.username" class="post-comment__author">
