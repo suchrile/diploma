@@ -30,7 +30,7 @@ onMounted(async () => {
 
 const fetchMovie = async () => {
   isLoading.value = true
-  const data = await $fetch('/api/movies/random')
+  const { data } = await useApiFetch('/api/movies/random')
   if (data) {
     movie.value = data
   }
