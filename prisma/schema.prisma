@@ -77,8 +77,9 @@ model UsersOnUsers {
 }
 
 model UserFavourite {
-  userId  Int @map("user_id")
-  movieId Int @map("movie_id")
+  userId    Int      @map("user_id")
+  movieId   Int      @map("movie_id")
+  createdAt DateTime @default(now()) @map("created_at")
 
   user User @relation(fields: [userId], references: [id])
 
@@ -87,8 +88,9 @@ model UserFavourite {
 }
 
 model UserWishlist {
-  userId  Int @map("user_id")
-  movieId Int @map("movie_id")
+  userId    Int      @map("user_id")
+  movieId   Int      @map("movie_id")
+  createdAt DateTime @default(now()) @map("created_at")
 
   user User @relation(fields: [userId], references: [id])
 
