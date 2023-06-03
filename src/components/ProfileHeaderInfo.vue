@@ -36,6 +36,7 @@ defineProps({
   &__description {
     margin: 15px 0 22px;
     opacity: 0.95;
+    line-height: 1.3;
   }
 }
 </style>
