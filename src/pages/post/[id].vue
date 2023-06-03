@@ -1,10 +1,12 @@
 <template>
-  <div v-if="post" class="post-page">
-    <PostView v-model="post" show-delete-button @delete="deletePost" />
-    <PostComments v-model="post" />
+  <div class="post-page">
+    <LoaderView v-if="isLoading" />
+    <div v-else-if="post" class="post-page__content">
+      <PostView v-model="post" show-delete-button @delete="deletePost" />
+      <PostComments v-model="post" />
+    </div>
+    <UiNotFound v-else text="Пост не найден" />
   </div>
-
-  <UiNotFound v-else-if="!isLoading && !post" text="Пост не найден" class="post-page__not-found" />
 </template>
 
 <script setup lang="ts">
@@ -14,7 +16,7 @@ const { useUserData } = useUser()
 const user = useUserData()
 
 const post = ref()
-const isLoading = ref(true)
+const isLoading = ref(false)
 
 onMounted(async () => {
   await fetchPost()
@@ -51,6 +53,9 @@ definePageMeta({
 
 <style scoped lang="scss">
 .post-page {
-  padding-bottom: 150px;
+  height: 100%;
+  &__content {
+    padding-bottom: 150px;
+  }
 }
 </style>
