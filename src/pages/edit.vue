@@ -28,7 +28,14 @@
 
       <UiInput v-model="userData.firstname" :disabled="isLoading" placeholder="Имя" class="edit-page__field" />
       <UiInput v-model="userData.lastname" :disabled="isLoading" placeholder="Фамилия" class="edit-page__field" />
-      <UiTextarea v-model="userData.description" :disabled="isLoading" placeholder="Описание профиля" class="edit-page__field" />
+      <UiTextarea
+        v-model="userData.description"
+        :max-length="maxProfileDescriptionLength"
+        :rows="4"
+        :disabled="isLoading"
+        placeholder="Описание профиля"
+        class="edit-page__field"
+      />
     </div>
 
     <div class="edit-page__actions">
@@ -43,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { userBackgroundPlaceholderUrl } from '~/consts'
+import { maxProfileDescriptionLength, userBackgroundPlaceholderUrl } from '~/consts'
 
 const { logout } = useAuth()
 const { useUserData, updateUser } = useUser()
