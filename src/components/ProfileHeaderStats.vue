@@ -1,14 +1,14 @@
 <template>
   <div class="profile-header-info-stats">
-    <RouterLink v-for="(stat, key) in stats" :key="stat.name" :to="`/${route.params.username}/${key}`" class="profile-header-info-stats__item">
+    <Component :is="stat.url ? NuxtLink : 'div'" v-for="(stat) in stats" :key="stat.name" :to="stat.url" class="profile-header-info-stats__item">
       <span class="profile-header-info-stats__item-value">{{ stat.value }}</span>
       <span class="profile-header-info-stats__item-name">{{ stat.label }}</span>
-    </RouterLink>
+    </Component>
   </div>
 </template>
 
 <script setup lang="ts">
-const route = useRoute()
+import { NuxtLink } from '#components'
 
 defineProps({
   stats: { type: Object, required: true }

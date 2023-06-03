@@ -16,10 +16,10 @@ const emit = defineEmits(['follow', 'unfollow'])
 const name = `${props.profile.firstname} ${props.profile.lastname || ''}`
 
 const stats = computed(() => ({
-  followers: { label: 'подписчики', value: props.profile.followersCount },
-  following: { label: 'подписки', value: props.profile.followingCount },
-  favourites: { label: 'избранное', value: props.profile.favouritesCount },
-  wishlist: { label: 'желаемое', value: props.profile.wishlistCount },
+  followers: { label: 'подписчики', value: props.profile.followersCount, url: `/${props.profile.username}/followers` },
+  following: { label: 'подписки', value: props.profile.followingCount, url: `/${props.profile.username}/following` },
+  favourites: { label: 'избранное', value: props.profile.favouritesCount, url: `/${props.profile.username}/favourites` },
+  wishlist: { label: 'желаемое', value: props.profile.wishlistCount, url: `/${props.profile.username}/wishlist` },
   posts: { label: 'посты', value: props.profile.postsCount }
 }))
 </script>
