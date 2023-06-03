@@ -1,7 +1,7 @@
 <template>
   <div class="post-view-footer-rating">
     <IconView name="star-solid" class="post-view-footer-rating__icon" />
-    <span class="post-view-footer-rating__score">{{ value/ 2 }} / 5</span>
+    <span class="post-view-footer-rating__score">{{ value }} / 10</span>
   </div>
 </template>
 
