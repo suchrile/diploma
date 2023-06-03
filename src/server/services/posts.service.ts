@@ -80,8 +80,9 @@ class PostsService {
     return this._repository.removeLike(postId, userId)
   }
 
-  createComment (postId: number, authorId: number, text: string) {
-    return this._repository.createComment(postId, authorId, text)
+  async createComment (postId: number, authorId: number, text: string) {
+    const [comment] = await this._repository.createComment(postId, authorId, text)
+    return comment
   }
 
   getComments (postId: number) {
