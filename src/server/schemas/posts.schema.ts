@@ -13,7 +13,7 @@ const postImagesSchema = joi.array().items(
 export const postCreateSchema = joi.object({
   authorId: usersIdSchema.required(),
   movieId: joi.number().integer().positive().required(),
-  text: joi.string().min(0).optional(),
+  text: joi.string().required(),
   movieRating: joi.number().integer().positive().required(),
   users: joi.array().items(usersIdSchema).required(),
   images: postImagesSchema.optional()
