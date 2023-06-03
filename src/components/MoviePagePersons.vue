@@ -22,8 +22,32 @@ const props = defineProps({
   persons: { type: Array, required: true }
 })
 
+const sortPersons = (persons) => {
+  const professionOrder = {
+    director: 1,
+    writer: 2,
+    producer: 3,
+    operator: 4,
+    composer: 5,
+    editor: 6,
+    designer: 7,
+    'voice-actor': 8
+  }
+  function getProfessionOrder (person) {
+    const profession = person.enProfession
+    if (profession in professionOrder) {
+      return professionOrder[profession]
+    } else {
+      return Infinity // Все остальные значения будут сортироваться последними
+    }
+  }
+  const sortedPersons = persons.sort((a, b) => getProfessionOrder(a) - getProfessionOrder(b))
+  return sortedPersons
+}
+
 const actors = props.persons.filter(p => p.enProfession === 'actor')
-const team = props.persons.filter(p => p.enProfession !== 'actor')
+const team = sortPersons(props.persons.filter(p => p.enProfession !== 'actor'))
+
 </script>
 
 <style scoped lang="scss">

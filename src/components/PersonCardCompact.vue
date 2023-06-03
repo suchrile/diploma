@@ -6,7 +6,7 @@
     <h5 class="movie-page-person-card__name">
       {{ person.name || person.enName }}
     </h5>
-    <span v-if="showProfession" class="movie-page-person-card__profession">{{ person.profession }}</span>
+    <span v-if="showProfession" class="movie-page-person-card__profession">{{ person.enProfession === 'writer' ? 'сценаристы': person.profession }}</span>
   </NuxtLink>
 </template>
 
