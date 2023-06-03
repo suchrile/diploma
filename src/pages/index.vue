@@ -30,10 +30,10 @@ const fetchData = async () => {
   if (posts.value.length === total.value) { return }
   isLoading.value = true
   const { data } = await useApiFetch('/api/posts/following', { query: { page: page.value++ } })
-  // if (data) {
-  //   total.value = data.total
-  //   posts.value = [...posts.value, ...data.docs]
-  // }
+  if (data) {
+    total.value = data.total
+    posts.value = [...posts.value, ...data.docs]
+  }
   isLoading.value = false
 }
 
