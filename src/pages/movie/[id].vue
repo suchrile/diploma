@@ -3,7 +3,13 @@
     <LoaderView v-if="isLoading" />
     <div v-else-if="movie" class="movie-page__content">
       <LoaderView v-if="isLoading" class="person-page__loading" />
-      <MoviePageHeader :movie="movie" />
+      <MoviePageHeader
+        :movie="movie"
+        @add-to-wishlist="addMovieToWishlist"
+        @remove-from-wishlist="removeMovieFromWishlist"
+        @add-to-favourites="addMovieToFavourites"
+        @remove-from-favourites="removeMovieFromFavourites"
+      />
       <MovieVideos v-if="movie.videos.trailers.length || movie.videos.teasers.length" :videos="movie.videos" class="movie-page__videos" />
       <MoviePageDetails :movie="movie" class="movie-page__details" />
       <FactsView v-if="movie.facts" :facts="movie.facts" class="movie-page__facts" />
@@ -16,8 +22,11 @@
 </template>
 
 <script setup lang="ts">
+
 const route = useRoute()
 const { setTitle } = useHeader()
+const { addToWishlist, removeFromWishlist } = useWishlist()
+const { addToFavourites, removeFromFavourites } = useFavourites()
 
 const movie = ref()
 const isLoading = ref(false)
@@ -30,15 +39,30 @@ onBeforeUnmount(() => {
   setTitle('')
 })
 
+const addMovieToWishlist = async () => {
+  movie.value.isInWishlist = await addToWishlist(movie.value.id)
+}
+const removeMovieFromWishlist = async () => {
+  movie.value.isInWishlist = await removeFromWishlist(movie.value.id)
+}
+
+const addMovieToFavourites = async () => {
+  movie.value.isInFavourites = await addToFavourites(movie.value.id)
+}
+const removeMovieFromFavourites = async () => {
+  movie.value.isInFavourites = await removeFromFavourites(movie.value.id)
+}
+
 const fetchMovie = async () => {
   isLoading.value = true
-  const { data } = await useFetch('/api/movies/' + route.params.id)
-  if (data.value) {
-    movie.value = data.value
+  const { data } = await useApiFetch('/api/movies/' + route.params.id)
+  if (data) {
+    movie.value = data
     setTitle(movie.value.name)
   }
   isLoading.value = false
 }
+
 definePageMeta({
   header: true,
   footer: true
