@@ -14,6 +14,7 @@ export default defineEventHandler((event) => {
     '/api/posts/:id/like',
     '/api/posts/:id/unlike',
     '/api/posts/:id/comments',
+    '/api/posts/following',
     '/api/movies',
     '/api/movies/:id'
   ]

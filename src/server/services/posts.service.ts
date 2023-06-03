@@ -72,6 +72,32 @@ class PostsService {
     }
   }
 
+  async findPostsOfFollowing (userId: number, { page, limit }) {
+    const [posts, total] = await this._repository.findPostsOfFollowing(userId, { page, limit })
+    if (!posts.length) {
+      return { docs: [], page, limit, total }
+    }
+    const postIds = []
+    const postMoviesIds = []
+    posts.forEach((p) => {
+      postIds.push(p.id)
+      postMoviesIds.push(p.movieId)
+    })
+    const movies = await this._kinopoiskService.getMoviesByIds(postMoviesIds)
+    const likeRecords = await this._repository.findLikeRecords(postIds, userId)
+    const mapped = posts.map(post => ({
+      ...post,
+      movie: movies.find(m => m.id === post.movieId),
+      isLiked: !!likeRecords.find(r => r.postId === post.id && r.userId === userId)
+    }))
+    return {
+      docs: mapped,
+      page: +page,
+      limit: +limit,
+      total
+    }
+  }
+
   async delete (postId: number, userId: number) {
     const post = await this._repository.findOne(postId)
     if (!post) {

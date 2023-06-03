@@ -1,9 +1,9 @@
 <template>
   <div class="feed-page">
+    <h1 class="feed-page__title">
+      Лента
+    </h1>
     <div v-if="posts.length" class="feed-page__content">
-      <h1 class="feed-page__title">
-        Лента
-      </h1>
       <InfinityScroll class="feed-page__list" @trigger="fetchData">
         <PostView v-for="(post, index) in posts" :key="post.id" v-model="posts[index]" />
       </InfinityScroll>
@@ -17,7 +17,7 @@
 const posts = ref([])
 const page = ref(1)
 const total = ref()
-const isLoading = ref(false)
+const isLoading = ref(true)
 
 onMounted(async () => {
   await fetchData()
@@ -26,7 +26,7 @@ onMounted(async () => {
 const fetchData = async () => {
   if (posts.value.length === total.value) { return }
   isLoading.value = true
-  const { data } = await useApiFetch('/api/posts', { query: { page: page.value++ } })
+  const { data } = await useApiFetch('/api/posts/following', { query: { page: page.value++ } })
   if (data) {
     total.value = data.total
     posts.value = [...posts.value, ...data.docs]
@@ -48,13 +48,14 @@ useHead({
 .feed-page {
   height: 100%;
   &__title {
-    margin: 20px 0 10px;
+    margin: 0;
+    padding: 20px 0 10px;
   }
   &__list {
     padding-bottom: 30px;
   }
   &__loader {
-    height: 100%;
+    height: calc(100% - 80px);
   }
 }
 </style>

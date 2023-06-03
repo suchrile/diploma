@@ -1,3 +1,4 @@
+import { Pagination } from '../types'
 import UsersRepository from './users.repository'
 import { prisma } from './index'
 
@@ -55,13 +56,29 @@ class PostsRepository {
     })
   }
 
+  async findPostsOfFollowing (userId: number, { page, limit }: Pagination) {
+    const user = await this._usersRepository.findOneById(userId)
+    const following = await this._usersRepository.findManyFollowing(user.username)
+    const followingIds = following.map(u => u.id)
+    return prisma.$transaction([
+      this._repository.findMany({
+        where: { authorId: { in: [userId, ...followingIds] } },
+        include: { users: { select: { id: true, username: true, images: { select: { avatarUrl: true } } } }, images: true },
+        take: limit,
+        skip: page && limit && (page - 1) * limit,
+        orderBy: { createdAt: 'desc' }
+      }),
+      this._repository.count({ where: { authorId: { in: [userId, ...followingIds] } } })
+    ])
+  }
+
   findMany ({ authorId, page, limit }) {
     return prisma.$transaction([
       this._repository.findMany({
         where: { authorId },
         include: { users: { select: { id: true, username: true, images: { select: { avatarUrl: true } } } }, images: true },
         take: limit,
-        skip: page * limit,
+        skip: page && limit && (page - 1) * limit,
         orderBy: { createdAt: 'desc' }
       }),
       this._repository.count({ where: { authorId } })

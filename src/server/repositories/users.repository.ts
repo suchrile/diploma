@@ -135,7 +135,7 @@ class UsersRepository {
         followers: {
           select: {
             followable: {
-              select: { username: true, firstname: true, lastname: true, images: { select: { avatarUrl: true } } }
+              select: { id: true, username: true, firstname: true, lastname: true, images: { select: { avatarUrl: true } } }
             }
           }
         }
@@ -151,7 +151,7 @@ class UsersRepository {
         following: {
           select: {
             follower: {
-              select: { username: true, firstname: true, lastname: true, images: { select: { avatarUrl: true } } }
+              select: { id: true, username: true, firstname: true, lastname: true, images: { select: { avatarUrl: true } } }
             }
           }
         }
