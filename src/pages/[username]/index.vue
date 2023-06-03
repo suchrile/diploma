@@ -2,7 +2,7 @@
   <div v-if="profile" class="profile-page">
     <ProfileHeader :profile="profile" @follow="follow" @unfollow="unfollow" />
     <InfinityScroll v-if="posts.length" class="profile-page__posts" @trigger="fetchPosts">
-      <PostView v-for="(post, index) in posts" :key="post.id" v-model="posts[index]" @delete="deletePost(post.id)" />
+      <PostView v-for="(post, index) in posts" :key="post.id" v-model="posts[index]" />
     </InfinityScroll>
     <LoaderView v-else-if="isPostsLoading" class="profile-page__posts-loader" />
     <div v-else class="profile-page__empty">
@@ -26,13 +26,6 @@ onMounted(async () => {
 
   useHead({ title: capitalizeFirstCharacter(profile.value?.username) })
 })
-
-const deletePost = async (id: number) => {
-  const { data } = await useApiFetch(`/api/posts/${id}`, { method: 'DELETE' })
-  if (data) {
-    posts.value = posts.value.filter(p => p.id !== id)
-  }
-}
 
 const fetchPosts = () => {
   fetchUserPosts(profile.value.id)

@@ -1,6 +1,6 @@
 <template>
   <div v-if="post" class="post-page">
-    <PostView v-model="post" @delete="removePost" />
+    <PostView v-model="post" show-delete-button @delete="deletePost" />
     <PostComments v-model="post" />
   </div>
 
@@ -20,7 +20,7 @@ onMounted(async () => {
   await fetchPost()
 })
 
-const removePost = async () => {
+const deletePost = async () => {
   const { data } = await useApiFetch(`/api/posts/${post.value.id}`, { method: 'DELETE' })
   if (data) {
     await navigateTo('/' + user.value.username)

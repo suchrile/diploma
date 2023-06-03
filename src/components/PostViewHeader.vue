@@ -2,7 +2,7 @@
   <div class="post-view-header">
     <PostViewHeaderAvatars :authors="authors" />
     <PostViewHeaderAuthorNames :authors="authors" />
-    <button v-if="movie.authorId === user.id" class="post-view-header__delete" @click="handleDeleteClick">
+    <button v-if="showDeleteButton && movie.authorId === user.id" class="post-view-header__delete" @click="handleDeleteClick">
       <IconView name="trash-can-regular" :size="16" />
     </button>
   </div>
@@ -11,7 +11,8 @@
 <script setup lang="ts">
 
 const props = defineProps({
-  movie: { type: Object, required: true }
+  movie: { type: Object, required: true },
+  showDeleteButton: { type: Boolean, default: false }
 })
 const emit = defineEmits(['delete'])
 

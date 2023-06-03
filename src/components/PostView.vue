@@ -1,6 +1,6 @@
 <template>
   <div class="post-view">
-    <PostViewHeader :movie="modelValue" class="post-view__header" @delete="emit('delete')" />
+    <PostViewHeader :movie="modelValue" :show-delete-button="showDeleteButton" class="post-view__header" @delete="emit('delete')" />
     <PostViewContent :post="modelValue" class="post-view__content" />
     <MovieCard :movie="modelValue.movie" class="post-view__movie-card" />
     <PostViewFooter :post="modelValue" class="post-view__footer" @like="like" @unlike="unlike" />
@@ -9,7 +9,8 @@
 
 <script setup lang="ts">
 const props = defineProps({
-  modelValue: { type: Object, required: true }
+  modelValue: { type: Object, required: true },
+  showDeleteButton: { type: Boolean, default: false }
 })
 const emit = defineEmits(['update:modelValue', 'delete'])
 
