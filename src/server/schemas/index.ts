@@ -7,3 +7,5 @@ export const paginationSchema = joi.object({
   page: joi.number().integer().positive().optional(),
   limit: joi.number().integer().positive().optional()
 })
+
+export const stringSchema = joi.string()

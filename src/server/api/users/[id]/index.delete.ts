@@ -4,7 +4,7 @@ import { usersIdSchema } from '../../../schemas/users.schema'
 export default defineEventHandler((event) => {
   const params = event.context.params!
 
-  const { value: id, error } = usersIdSchema.required().validate(params.id)
+  const { value: id, error } = usersIdSchema.validate(params.id)
 
   if (error) {
     throw createError({

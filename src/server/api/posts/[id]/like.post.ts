@@ -1,8 +1,18 @@
 import PostsService from '../../../services/posts.service'
+import { idSchema } from '../../../schemas'
 
 export default defineEventHandler((event) => {
   const userId = event.context.user.id
-  const { id: postId } = event.context.params!
+  const params = event.context.params!
 
-  return PostsService.like(Number(postId), userId)
+  const { value: postId, error } = idSchema.validate(params.id)
+
+  if (error) {
+    throw createError({
+      statusCode: 400,
+      message: error.message
+    })
+  }
+
+  return PostsService.like(postId, userId)
 })

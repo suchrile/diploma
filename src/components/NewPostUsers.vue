@@ -1,7 +1,7 @@
 <template>
   <div class="new-post-users">
     <div class="new-post-users__list">
-      <button v-if="modelValue.length < 3" class="new-post-users__add" @click="isOverlayOpen = true">
+      <button v-if="users.length < maxPostUsersLength" class="new-post-users__add" @click="isOverlayOpen = true">
         <IconView name="plus-regular" :size="26" />
       </button>
       <div v-for="user in users" :key="user.id" class="new-post-users__item" @click="removeUser(user.id)">
@@ -13,6 +13,7 @@
 </template>
 
 <script setup lang="ts">
+import { maxPostUsersLength } from '~/consts'
 
 defineProps({
   modelValue: { type: Array, default: () => [] }
@@ -43,7 +44,9 @@ const removeUser = (userId: number) => {
 .new-post-users {
   &__list {
     display: flex;
-    gap: 10px;
+    gap: 8px;
+    margin: 0 -15px;
+    padding: 0 15px;
     overflow-x: scroll;
     &::-webkit-scrollbar {
       display: none;
@@ -52,6 +55,7 @@ const removeUser = (userId: number) => {
   &__item {
     display: flex;
     align-items: center;
+    flex-shrink: 0;
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.15);
     overflow: hidden;
@@ -62,6 +66,7 @@ const removeUser = (userId: number) => {
     }
   }
   &__add {
+    flex-shrink: 0;
     width: 60px;
     aspect-ratio: 1/1;
     border: none;

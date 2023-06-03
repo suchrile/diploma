@@ -6,7 +6,7 @@ export default defineEventHandler((event) => {
 
   const params = event.context.params!
 
-  const { value: username, error } = usersUsernameSchema.required().validate(params.id)
+  const { value: username, error } = usersUsernameSchema.validate(params.id)
 
   if (error) {
     throw createError({

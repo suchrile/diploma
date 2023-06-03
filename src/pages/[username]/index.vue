@@ -41,7 +41,7 @@ definePageMeta({
 .profile-page {
   height: 100%;
   &__posts {
-    margin-top: 10px;
+    margin-top: 5px;
     padding-bottom: 50px;
   }
   &__posts-loader {

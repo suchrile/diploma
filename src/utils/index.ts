@@ -1,5 +1,3 @@
-export { formatDate } from './date'
-
 export const removeHtml = (value: string) => {
   return value.replace(/<[^>]*>/g, '')
 }

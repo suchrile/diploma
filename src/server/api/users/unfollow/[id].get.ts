@@ -2,14 +2,7 @@ import FollowingService from '../../../services/following.service'
 import { usersIdSchema } from '../../../schemas/users.schema'
 
 export default defineEventHandler((event) => {
-  const user = event.context.user
-
-  if (!user) {
-    throw createError({
-      statusCode: 401,
-      message: 'Unauthorized'
-    })
-  }
+  const userId = event.context.user.id
 
   const params = event.context.params!
 
@@ -22,12 +15,12 @@ export default defineEventHandler((event) => {
     })
   }
 
-  if (user.id === followableId) {
+  if (userId === followableId) {
     throw createError({
       statusCode: 400,
       message: 'Вы не можете отписаться сами от себя'
     })
   }
 
-  return FollowingService.unfollow(user.id, followableId)
+  return FollowingService.unfollow(userId, followableId)
 })

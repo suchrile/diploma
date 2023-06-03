@@ -2,14 +2,7 @@ import FollowingService from '../../../services/following.service'
 import { usersIdSchema } from '../../../schemas/users.schema'
 
 export default defineEventHandler((event) => {
-  const user = event.context.user
-
-  if (!user) {
-    throw createError({
-      statusCode: 401,
-      message: 'Unauthorized'
-    })
-  }
+  const userId = event.context.user.id
 
   const query = getQuery(event)
 
@@ -22,5 +15,5 @@ export default defineEventHandler((event) => {
     })
   }
 
-  return FollowingService.checkFollow(user.id, followableId)
+  return FollowingService.checkFollow(userId, followableId)
 })
