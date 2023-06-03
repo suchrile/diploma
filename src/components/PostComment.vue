@@ -1,5 +1,5 @@
 <template>
-  <div class="post-comment">
+  <div class="post-comment" @click="handleDeleteClick">
     <div class="post-comment__wrapper">
       <NuxtLink :to="'/' + comment.author.username" class="post-comment__avatar">
         <img :src="comment.author.images.avatarUrl" :alt="comment.author.username">
@@ -16,9 +16,21 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
+const props = defineProps({
   comment: { type: Object, required: true }
 })
+const emit = defineEmits(['delete'])
+
+const { useUserData } = useUser()
+const user = useUserData()
+
+const handleDeleteClick = () => {
+  if (props.comment.author.username !== user.value.username) { return }
+  const confirmed = confirm('Вы уверены, что хотите удалить этот комментарий?')
+  if (confirmed) {
+    emit('delete', props.comment.id)
+  }
+}
 
 </script>
 
@@ -29,6 +41,8 @@ defineProps({
     display: grid;
     grid-template-columns: 38px 1fr;
     gap: 12px;
+    padding-right: 50px;
+    position: relative;
   }
   &__avatar {
     aspect-ratio: 1/1;

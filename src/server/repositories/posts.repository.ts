@@ -112,6 +112,13 @@ class PostsRepository {
     ])
   }
 
+  removeComment (commentId: number, postId: number) {
+    return prisma.$transaction([
+      this._commentsRepository.delete({ where: { id: commentId } }),
+      this.decrementField(postId, 'commentsCount')
+    ])
+  }
+
   findComments (postId: number) {
     return this._commentsRepository.findMany({
       where: { postId },
@@ -122,6 +129,10 @@ class PostsRepository {
         createdAt: true
       }
     })
+  }
+
+  findComment (id: number) {
+    return this._commentsRepository.findUnique({ where: { id } })
   }
 
   incrementField (id: number, field: string) {

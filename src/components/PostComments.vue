@@ -1,10 +1,10 @@
 <template>
   <div class="post-comments">
     <h3 class="post-comments__title">
-      Комментарии ({{ comments.length }})
+      Комментарии ({{ modelValue.commentsCount }})
     </h3>
     <div v-if="comments.length" class="post-comments__list">
-      <PostComment v-for="comment in comments" :key="comment.id" :comment="comment" class="post-comments__item" />
+      <PostComment v-for="comment in comments" :key="comment.id" :comment="comment" class="post-comments__item" @delete="remove" />
     </div>
     <div v-else class="post-comments__empty">
       Ваш комментарий будет первым
@@ -35,6 +35,17 @@ const add = async () => {
     input.value = ''
     comments.value.unshift(data)
     emit('update:modelValue', { ...props.modelValue, commentsCount: props.modelValue.commentsCount + 1 })
+  }
+}
+
+const remove = async (id: number) => {
+  const { data } = await useApiFetch(`/api/posts/${props.modelValue.id}/comments`, {
+    method: 'DELETE',
+    query: { id }
+  })
+  if (data) {
+    comments.value = comments.value.filter(c => c.id !== id)
+    emit('update:modelValue', { ...props.modelValue, commentsCount: props.modelValue.commentsCount - 1 })
   }
 }
 

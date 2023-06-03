@@ -89,6 +89,24 @@ class PostsService {
     return comment
   }
 
+  async deleteComment (commentId: number, postId: number, userId: number) {
+    const desiredComment = await this._repository.findComment(commentId)
+    if (!desiredComment) {
+      throw createError({
+        statusCode: 400,
+        message: 'Комментарий не найден.'
+      })
+    }
+    if (desiredComment.authorId !== userId) {
+      throw createError({
+        statusCode: 400,
+        message: 'Невозможно удалить комментарий, так как он принадлежит другому пользователю.'
+      })
+    }
+    const [comment] = await this._repository.removeComment(commentId, postId)
+    return comment
+  }
+
   getComments (postId: number) {
     return this._repository.findComments(postId)
   }
