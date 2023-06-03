@@ -1,5 +1,6 @@
 import UsersRepository from '../repositories/users.repository'
 import UsersTransformer from '../transformers/users.transformer'
+import { Pagination } from '../types'
 import CloudinaryService from './cloudinary.service'
 import KinopoiskService from './kinopoisk.service'
 
@@ -103,22 +104,45 @@ class UsersService {
     return this._repository.createFavourite(userId, movieId)
   }
 
-  async getFavourites (userId: number) {
-    const favourites = await this._repository.findFavourites(userId)
+  async removeFromFavourites (userId: number, movieId: number) {
+    const [favourite] = await this._repository.removeFavourite(userId, movieId)
+    return favourite
+  }
+
+  async getFavourites (username: string, { page, limit }: Pagination) {
+    const { favourites, _count } = await this._repository.findFavourites(username, { page, limit })
     const movieIds = favourites.map(f => f.movieId)
     const movies = await this._kinopoiskService.getMoviesByIds(movieIds)
-    return favourites.map(f => ({ ...f, movie: movies.find(m => m.id === f.movieId) }))
+    const mapped = favourites.map(f => ({ ...f, movie: movies.find(m => m.id === f.movieId) }))
+    return { docs: mapped, page, limit, total: _count.favourites }
   }
 
-  addToWishlist (userId: number, movieId: number) {
-    return this._repository.createWishlist(userId, movieId)
+  async addToWishlist (userId: number, movieId: number) {
+    const [wishlist] = await this._repository.createWishlist(userId, movieId)
+    return wishlist
   }
 
-  async getWishlist (username: string) {
-    const { wishlist } = await this._repository.findWishlist(username)
+  async removeFromWishlist (userId: number, movieId: number) {
+    const [wishlist] = await this._repository.removeWishlist(userId, movieId)
+    return wishlist
+  }
+
+  async getWishlist (username: string, { page, limit = 15 }: Pagination) {
+    const { wishlist, _count } = await this._repository.findWishlist(username, { page, limit })
     const movieIds = wishlist.map(el => el.movieId)
     const movies = await this._kinopoiskService.getMoviesByIds(movieIds)
-    return wishlist.map(el => ({ ...el, movie: movies.find(m => m.id === el.movieId) }))
+    const mapped = wishlist.map(el => ({ ...el, movie: movies.find(m => m.id === el.movieId) }))
+    return { docs: mapped, page, limit, total: _count.wishlist }
+  }
+
+  async checkIfMovieInFavourites (userId: number, movieId: number) {
+    const record = await this._repository.findFavouritesRecord(userId, movieId)
+    return !!record
+  }
+
+  async checkIfMovieInWishlist (userId: number, movieId: number) {
+    const record = await this._repository.findWishlistRecord(userId, movieId)
+    return !!record
   }
 }
 

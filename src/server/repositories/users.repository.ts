@@ -1,3 +1,4 @@
+import { Pagination } from '../types'
 import { prisma } from './index'
 
 class UsersRepository {
@@ -79,13 +80,13 @@ class UsersRepository {
     })
   }
 
-  findMany (query: string, { page, limit }) {
+  findMany (query: string, { page, limit }: Pagination) {
     return prisma.$transaction([
       this._repository.findMany({
         where: { username: { contains: query } },
         select: { id: true, username: true, firstname: true, lastname: true, images: { select: { avatarUrl: true } } },
         take: limit,
-        skip: page - 1
+        skip: page && limit && page - 1
       }),
       this._repository.count({ where: { username: { contains: query } } })
     ])
@@ -167,22 +168,67 @@ class UsersRepository {
   }
 
   createFavourite (userId: number, movieId: number) {
-    return this._favouritesRepository.create({ data: { userId, movieId } })
+    return prisma.$transaction([
+      this._favouritesRepository.create({ data: { userId, movieId } }),
+      this.incrementField(userId, 'favouritesCount')
+    ])
   }
 
-  findFavourites (userId: number) {
-    return this._favouritesRepository.findMany({ where: { userId } })
+  removeFavourite (userId: number, movieId: number) {
+    return prisma.$transaction([
+      this._favouritesRepository.delete({ where: { userId_movieId: { userId, movieId } } }),
+      this.decrementField(userId, 'favouritesCount')
+    ])
+  }
+
+  findFavourites (username: string, { page, limit }: Pagination) {
+    return this._repository.findUnique({
+      where: { username },
+      select: {
+        favourites: {
+          take: limit,
+          skip: page && limit && (page - 1) * limit,
+          orderBy: { createdAt: 'desc' }
+        },
+        _count: { select: { favourites: true } }
+      }
+    })
   }
 
   createWishlist (userId: number, movieId: number) {
-    return this._wishlistRepository.create({ data: { userId, movieId } })
+    return prisma.$transaction([
+      this._wishlistRepository.create({ data: { userId, movieId } }),
+      this.incrementField(userId, 'wishlistCount')
+    ])
   }
 
-  findWishlist (username: string) {
+  removeWishlist (userId: number, movieId: number) {
+    return prisma.$transaction([
+      this._wishlistRepository.delete({ where: { userId_movieId: { userId, movieId } } }),
+      this.decrementField(userId, 'wishlistCount')
+    ])
+  }
+
+  findWishlist (username: string, { page, limit }: Pagination) {
     return this._repository.findUnique({
       where: { username },
-      select: { wishlist: true }
+      select: {
+        wishlist: {
+          take: limit,
+          skip: page && limit && (page - 1) * limit,
+          orderBy: { createdAt: 'desc' }
+        },
+        _count: { select: { wishlist: true } }
+      }
     })
+  }
+
+  findFavouritesRecord (userId: number, movieId: number) {
+    return this._favouritesRepository.findUnique({ where: { userId_movieId: { userId, movieId } } })
+  }
+
+  findWishlistRecord (userId: number, movieId: number) {
+    return this._wishlistRepository.findUnique({ where: { userId_movieId: { userId, movieId } } })
   }
 }
 
