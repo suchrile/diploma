@@ -10,7 +10,7 @@
         @add-to-favourites="addMovieToFavourites"
         @remove-from-favourites="removeMovieFromFavourites"
       />
-      <MovieVideos v-if="movie.videos.trailers.length || movie.videos.teasers.length" :videos="movie.videos" class="movie-page__videos" />
+      <MovieVideos v-if="movie.videos?.trailers?.length || movie.videos?.teasers?.length" :videos="movie.videos" class="movie-page__videos" />
       <MoviePageDetails :movie="movie" class="movie-page__details" />
       <FactsView v-if="movie.facts" :facts="movie.facts" class="movie-page__facts" />
       <MoviePagePersons v-if="movie.persons.length" :persons="movie.persons" class="movie-page__persons" />

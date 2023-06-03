@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { minLength, sameAs, required, helpers } from '@vuelidate/validators'
+import { minLength, sameAs, required, helpers, maxLength } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
 import { minPasswordLength } from '~/consts'
 
@@ -44,7 +44,13 @@ const isLoading = useAuthLoading()
 
 const rules = computed(() => ({
   firstname: { required: helpers.withMessage('Введите Ваше имя', required) },
-  username: { required: helpers.withMessage('Введите имя пользователя', required) },
+  username: {
+    username: helpers.withMessage('Некорректное имя пользователя', helpers.regex(/^(?=.*[a-z].*[a-z].*[a-z])[a-z0-9-_.]+$/)),
+    minLength: helpers.withMessage('Минимальная длина – 3 символа', minLength(3)),
+    maxLength: helpers.withMessage('Максимальная длина – 20 символа', maxLength(20)),
+    reservedWord: helpers.withMessage('Зарезервированное слово', helpers.regex(/^(?!post$|new-post$|random$|edit$|login$|signup$|search$|movie$|person$).+$/)),
+    required: helpers.withMessage('Введите имя пользователя', required)
+  },
   password: {
     minLength: helpers.withMessage(`Минимальная длина – ${minPasswordLength} символов`, minLength(minPasswordLength)),
     required: helpers.withMessage('Введите пароль', required)

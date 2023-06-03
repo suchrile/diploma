@@ -13,7 +13,7 @@ class KinopoiskService {
   }
 
   async getMoviesByIds (ids: string[]) {
-    const movies = await this._get('/v1.3/movie', { id: ids })
+    const movies = await this._get('/v1.3/movie', { id: ids, selectFields: ['id', 'poster', 'name', 'alternativeName', 'genres', 'year', 'rating', 'ratingMpaa'] })
     return movies.docs
   }
 
@@ -32,7 +32,7 @@ class KinopoiskService {
   }
 
   searchMovies (query: string) {
-    return this._get('/v1.2/movie/search', { query })
+    return this._get('/v1.2/movie/search', { query, selectFields: ['id', 'poster', 'name', 'alternativeName', 'genres', 'year', 'rating', 'ratingMpaa'] })
   }
 
   searchPersons (query: string) {

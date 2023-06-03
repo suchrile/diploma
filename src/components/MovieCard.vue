@@ -18,7 +18,7 @@
             <span class="movie-card-info-ratings__item-name">Кинопоиск</span>
             <span class="movie-card-info-ratings__item-score">{{ movie.rating.kp.toFixed(1) }}</span>
           </div>
-          <div v-if="movie.ratingMpaa" class="movie-card-info__age">
+          <div v-if="movie.ratingMpaa === 'r'" class="movie-card-info__age">
             18+
           </div>
         </div>
@@ -114,6 +114,8 @@ const setDetails = () => {
       }
     }
     &__age {
+      display: flex;
+      align-items: center;
       padding: 5px 4px 5px 5px;
       font-size: 12px;
       line-height: 1;

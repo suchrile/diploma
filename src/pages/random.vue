@@ -6,7 +6,7 @@
 
     <div v-else-if="!isLoading && movie" class="random-page__content">
       <MovieCard :movie="movie" />
-      <MovieVideos :show-heading="false" :videos="movie.videos" class="random-page__videos" />
+      <MovieVideos v-if="movie.videos?.trailers?.length || movie.videos?.teasers?.length" :show-heading="false" :videos="movie.videos" class="random-page__videos" />
       <MovieDescription :short-description="movie.shortDescription" :description="movie.description" class="random-page__description" />
       <UiButtonLarge icon="dice-regular" class="random-page__button" @click="fetchMovie">
         Перебросить
