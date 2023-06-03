@@ -45,13 +45,13 @@ definePageMeta({
     padding-bottom: 50px;
   }
   &__posts-loader {
-    height: calc(100% - 380px);
+    height: calc(100% - 400px);
   }
   &__empty {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: calc(100% - 356px);
+    height: calc(100% - 400px);
     padding: 0 15px;
     font-size: 17px;
     opacity: 0.5;
