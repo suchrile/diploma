@@ -2,7 +2,6 @@
   <div v-if="shortDescription || description" class="movie-description">
     <div
       class="movie-description__content"
-      :class="{collapsed: !isLongDescriptionShown}"
     >
       <p>
         {{ shortDescription || description }}
@@ -40,12 +39,6 @@ const isLongDescriptionShown = ref(false)
 <style scoped lang="scss">
 .movie-description {
   padding: 4px 0 14px;
-  &__content.collapsed {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
-    overflow: hidden;
-  }
   & p {
     margin: 0;
     &:not(:first-child) {

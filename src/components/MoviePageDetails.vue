@@ -88,7 +88,7 @@ const details = ref([
     }
   }
   &__list {
-    margin: 0;
+    margin: 10px 0 0;
     padding: 0;
     list-style: none;
   }
